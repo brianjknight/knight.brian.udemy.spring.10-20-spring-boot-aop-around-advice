@@ -27,15 +27,29 @@ public class MyDemoLoggingAspect {
         String method = proceedingJoinPoint.getSignature().toShortString();
         System.out.println("\n=====>>> Executing @Around on method: " + method);
 
-        long begin = System.currentTimeMillis();
+//        long begin = System.currentTimeMillis();
+        long begin = System.nanoTime();
 
         // EXECUTE the method
-        Object result = proceedingJoinPoint.proceed();
-        System.out.println("getFortune done executing: result = " + result);
+//        Object result = proceedingJoinPoint.proceed();
+//        System.out.println("getFortune done executing: result = " + result);
 
-        long end = System.currentTimeMillis();
+        // EXECUTE the method
+        Object result = null;
+        try {
+            result = proceedingJoinPoint.proceed();
+        }
+        catch (Exception exc) {
+            // log the exception
+            System.out.println(exc.getMessage());
+
+            // give user a custom message
+            result = "Major accident! But no worries, your private AOP helicopter is on the way!";
+        }
+
+        long end = System.nanoTime();
         long duration = end - begin;
-        System.out.println("\n=====> Duration: " + duration / 1000.0 + " seconds");
+        System.out.println("\n=====> Duration: " + duration + " nano seconds");
 
         return result;
     }
